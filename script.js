@@ -16,14 +16,26 @@ container.addEventListener("click", (e) => {
 // Movie Select event
 movieSelect.addEventListener("change", (e) => {
   ticketPrice = +e.target.value;
+  setMovieData(e.target.selectedIndex, e.target.value);
   updateSelectedCount();
 });
 
 // update total and count
 function updateSelectedCount() {
   const selectedSeats = document.querySelectorAll(".row .seat.selected");
+  if (localStorage.getItem("selectedMovieIndex") === null)
+    setMovieData(movieSelect.selectedIndex, movieSelect.value);
+
+  // NodeList to Array & get selected seats Index
+  const selectedSeatsIndexes = [...selectedSeats].map((seat) => [...seats].indexOf(seat));
+  localStorage.setItem("selectedSeatsIndexes", JSON.stringify(selectedSeatsIndexes));
 
   const selectedSeatsCount = selectedSeats.length;
   count.innerText = selectedSeatsCount;
   total.innerText = selectedSeatsCount * ticketPrice;
+}
+
+function setMovieData(movieIndex, moviePrice) {
+  localStorage.setItem("selectedMovieIndex", movieIndex);
+  localStorage.setItem("selectedMoviePrice", moviePrice);
 }
